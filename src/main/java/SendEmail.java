@@ -40,7 +40,7 @@ public class SendEmail {
         // Get session
         Session session =
                 Session.getInstance(props, null);
-        session.setDebug(true);
+        session.setDebug(false);
         // Define message
         MimeMessage message = new MimeMessage(session);
         message.setFrom(new InternetAddress(from));
@@ -76,7 +76,7 @@ public class SendEmail {
         String shellString = "sh " + shPath;
         String[] cmd = new String[]{"sh", "-c", shellString};
         try {
-            Runtime.getRuntime().exec(cmd);
+            System.out.println("run shell" + Runtime.getRuntime().exec(cmd));
         } catch (IOException e) {
             e.printStackTrace();
             return false;
