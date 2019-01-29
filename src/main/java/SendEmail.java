@@ -25,8 +25,8 @@ public class SendEmail {
         String from = "qa_vision@163.com";//发送邮件的邮箱名
         SendEmail email = new SendEmail();
         email.setAttachment();
-        if(email.isFail()) {
-            if (email.runSync()) {
+        if(email.runSync()) {
+            if(email.isFail()) {
                 email.send(from);
             }
         }
