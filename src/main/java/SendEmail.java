@@ -19,6 +19,7 @@ public class SendEmail {
     private String to = "cuimingyue@baixing.com";//接收邮件的邮箱名
     private String fileAttachment = "";
     private String preAttachment = "";
+    public String output = "/Users/cuimingyue/.jenkins/workspace/机关术/output/";
 
     public static void main (String args[])
             throws Exception {
@@ -103,7 +104,7 @@ public class SendEmail {
 
     //获得最新的报告文件夹 & 报告时间戳
     public String[] getLastestDic(){
-        File file = new File("/Users/cuimingyue/Library/tomcat9/webapps/jiguanshu/output/");
+        File file = new File(output);
         File[] reports = file.listFiles();
         long createTime = 0;
         String path[] = new String[2];
