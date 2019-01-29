@@ -120,12 +120,14 @@ public class SendEmail {
     }
 
     public boolean isFail(){
-        File dic = new File(preAttachment);
-        File[] files = dic.listFiles();
-        for(File file:files){
-            System.out.println(file.getName());
-            if(file.getName().contains("failReport")){
-                return true;
+        if (!preAttachment.equals("")) {
+            File dic = new File(preAttachment);
+            File[] files = dic.listFiles();
+            for (File file : files) {
+                System.out.println(file.getName());
+                if (file.getName().contains("failReport")) {
+                    return true;
+                }
             }
         }
         return false;
