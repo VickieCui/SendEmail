@@ -31,8 +31,8 @@ public class SendEmail {
             if(email.isFail()) {
                 email.send(from);
             }
+            email.del();
         }
-        email.del();
     }
 
     public void send(String from) throws MessagingException, IOException {
