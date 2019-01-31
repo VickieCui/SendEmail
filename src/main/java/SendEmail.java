@@ -4,8 +4,7 @@ import javax.activation.DataSource;
 import javax.activation.FileDataSource;
 import javax.mail.*;
 import javax.mail.internet.*;
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Properties;
@@ -20,6 +19,8 @@ public class SendEmail {
     private String fileAttachment = "";
     private String preAttachment = "";
     public String output = "/Users/cuimingyue/.jenkins/workspace/机关术/output/";
+    String shell = "scp -r /Users/cuimingyue/.jenkins/workspace/机关术/output/* ubuntu@172.31.129.8:/home/ubuntu/tomcat9/webapps/jiguanshu/output/";
+    String rm = "rm -rf /Users/cuimingyue/.jenkins/workspace/机关术/output/*";
 
     public static void main (String args[])
             throws Exception {
@@ -31,6 +32,7 @@ public class SendEmail {
                 email.send(from);
             }
         }
+        email.del();
     }
 
     public void send(String from) throws MessagingException, IOException {
@@ -75,9 +77,19 @@ public class SendEmail {
 
     public boolean runSync(){
         String shellString = "sh " + shPath;
-        String[] cmd = new String[]{"sh", "-c", shellString};
+        String[] cmd = new String[]{"sh", "-c", shell};
         try {
-            System.out.println("run shell" + Runtime.getRuntime().exec(cmd));
+            Process p = Runtime.getRuntime().exec(cmd);
+            InputStream fis=p.getInputStream();
+            InputStreamReader isr=new InputStreamReader(fis);
+            BufferedReader br=new BufferedReader(isr);
+            String line=null;
+            System.out.println("*");
+            while((line=br.readLine())!=null)
+            {
+                System.out.println("*"+line);
+            }
+            System.out.println("run shell");
         } catch (IOException e) {
             e.printStackTrace();
             return false;
@@ -150,5 +162,16 @@ public class SendEmail {
         return preAttachment;
     }
 
-
+    public Boolean del(){
+        String shellString = "sh " + shPath;
+        String[] cmd = new String[]{"sh", "-c", rm};
+        try {
+            Runtime.getRuntime().exec(cmd);
+            System.out.println("run rm");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
 }
