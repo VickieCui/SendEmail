@@ -121,8 +121,8 @@ public class SendEmail {
             String name = report.getName().replace(" ","");
             if (name.contains("result") && name.contains("html")) {
                 System.out.println("after if"+report.getName());
-                if (Long.valueOf(report.getName()) > createTime) {
-                    createTime = Long.valueOf(report.getName());
+                if(report.lastModified() > createTime) {
+                    createTime = report.lastModified();
                     path[0] = report.getAbsolutePath();
                     System.out.println(path[0]);
                 }
