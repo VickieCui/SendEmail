@@ -54,6 +54,7 @@ public class SendEmail {
         // Part two is attachment
         messageBodyPart = new MimeBodyPart();
         setAttachment();
+        System.out.println("file Name"+fileAttachment);
         DataSource source = new FileDataSource(fileAttachment);
         messageBodyPart.setDataHandler(new DataHandler(source));
         messageBodyPart.setFileName("report.zip");
@@ -116,9 +117,9 @@ public class SendEmail {
         long createTime = 0;
         String path[] = new String[2];
         for (File report : reports) {
-            System.out.println("if前："+report.getName());
+            System.out.println("before if："+report.getName());
             if (report.getName().contains("report") && report.getName().contains("html")) {
-                System.out.println("if后："+report.getName());
+                System.out.println("after if："+report.getName());
                 if (Long.valueOf(report.getName()) > createTime) {
                     createTime = Long.valueOf(report.getName());
                     path[0] = report.getAbsolutePath();
