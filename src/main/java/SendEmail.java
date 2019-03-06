@@ -54,7 +54,6 @@ public class SendEmail {
         // Part two is attachment
         messageBodyPart = new MimeBodyPart();
         setAttachment();
-        CompressUtil.compress(getPreAttachment(), getFileAttachment());
         DataSource source = new FileDataSource(fileAttachment);
         messageBodyPart.setDataHandler(new DataHandler(source));
         messageBodyPart.setFileName("report.zip");
@@ -146,7 +145,7 @@ public class SendEmail {
     //附件的生成前 & 生成后的地址
     public void setAttachment() {
         String path = getLastestDic()[0];
-        fileAttachment = path + ".zip";
+        fileAttachment = path;
         preAttachment = path;
     }
 
