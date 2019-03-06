@@ -15,7 +15,7 @@ public class SendEmail {
     private String user = "qa_vision@163.com";//发送邮件的邮箱名
     private String password = "123baixing";//密码
     private String shPath = "/Users/cuimingyue/Desktop/sync.sh";
-    private String to = "cuimingyue@baixing.com";//接收邮件的邮箱名
+    private String to = "cuimingyue@baixing.com,guizhanluo@baixing.com";//接收邮件的邮箱名
     private String fileAttachment = "";
     private String preAttachment = "";
     public String output = "/home/ubuntu/.jenkins/workspace/e2e-ui/report";
@@ -48,7 +48,7 @@ public class SendEmail {
         MimeBodyPart messageBodyPart = new MimeBodyPart();
         //fill message
 //        String url = createUrl();
-        messageBodyPart.setText("Hi ,UI automation has failed. For more details，see the attachment ～");//此处为邮件内容
+        messageBodyPart.setText("Hi ,UI automation has failed. For more details, see the attachment.");//此处为邮件内容
         Multipart multipart = new MimeMultipart();
         multipart.addBodyPart(messageBodyPart);
         // Part two is attachment
