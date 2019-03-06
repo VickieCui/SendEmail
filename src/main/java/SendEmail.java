@@ -124,6 +124,7 @@ public class SendEmail {
                 if (Long.valueOf(report.getName()) > createTime) {
                     createTime = Long.valueOf(report.getName());
                     path[0] = report.getAbsolutePath();
+                    System.out.println(path[0]);
                 }
             }
         }
@@ -150,6 +151,7 @@ public class SendEmail {
     public void setAttachment() {
         String path = getLastestDic()[0];
         fileAttachment = path;
+        System.out.println(fileAttachment);
         preAttachment = path;
     }
 
