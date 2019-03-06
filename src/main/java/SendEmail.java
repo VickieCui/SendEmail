@@ -127,7 +127,7 @@ public class SendEmail {
                 }
             }
         }
-        path[1] = String.valueOf(createTime);
+        //path[1] = String.valueOf(createTime);
         return path;
     }
 
