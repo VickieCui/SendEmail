@@ -57,7 +57,7 @@ public class SendEmail {
         System.out.println("file Name"+fileAttachment);
         DataSource source = new FileDataSource(fileAttachment);
         messageBodyPart.setDataHandler(new DataHandler(source));
-        messageBodyPart.setFileName("report.zip");
+        messageBodyPart.setFileName("report.html");
         multipart.addBodyPart(messageBodyPart);
         // Put parts in message
         message.setContent(multipart);
