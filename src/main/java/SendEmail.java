@@ -116,7 +116,7 @@ public class SendEmail {
         long createTime = 0;
         String path[] = new String[2];
         for (File report : reports) {
-            if (report.isDirectory() && !report.getName().contains("report") && report.getName().contains("html")) {
+            if (report.getName().contains("report") && report.getName().contains("html")) {
                 if (Long.valueOf(report.getName()) > createTime) {
                     createTime = Long.valueOf(report.getName());
                     path[0] = report.getAbsolutePath();
