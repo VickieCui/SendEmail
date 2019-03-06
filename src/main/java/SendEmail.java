@@ -43,12 +43,12 @@ public class SendEmail {
         MimeMessage message = new MimeMessage(session);
         message.setFrom(new InternetAddress(from));
         message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
-        message.setSubject("自动化失败");//此处设置邮件标题
+        message.setSubject("UI automation failed");//此处设置邮件标题
         // create the message part
         MimeBodyPart messageBodyPart = new MimeBodyPart();
         //fill message
 //        String url = createUrl();
-        messageBodyPart.setText("Hi ,\n自动化用例失败了呢>_<，请下载附件查看～");//此处为邮件内容
+        messageBodyPart.setText("Hi ,UI automation has failed. For more details，see the attachment ～");//此处为邮件内容
         Multipart multipart = new MimeMultipart();
         multipart.addBodyPart(messageBodyPart);
         // Part two is attachment
