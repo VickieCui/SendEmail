@@ -17,7 +17,7 @@ public class SendEmail {
     private String shPath = "/Users/cuimingyue/Desktop/sync.sh";
     private String to[] = {"cuimingyue@baixing.com","guizhanluo@baixing.com"};//接收邮件的邮箱名
     private String fileAttachment = "";
-    private String preAttachment = "";
+    private String fileName = "";
     public String output = "/home/ubuntu/.jenkins/workspace/e2e-ui/report";
     //String shell = "scp -r /Users/cuimingyue/.jenkins/workspace/机关术/output/* ubuntu@172.31.129.8:/home/ubuntu/tomcat9/webapps/jiguanshu/output/";
     //String rm = "rm -rf /Users/cuimingyue/.jenkins/workspace/机关术/output/*";
@@ -47,7 +47,7 @@ public class SendEmail {
             sendTo[i] = new InternetAddress(to[i]);
         }
         message.addRecipients(Message.RecipientType.TO, sendTo);
-        message.setSubject("UI automation failed");//此处设置邮件标题
+        message.setSubject("UI automation result");//此处设置邮件标题
         // create the message part
         MimeBodyPart messageBodyPart = new MimeBodyPart();
         //fill message
@@ -61,7 +61,7 @@ public class SendEmail {
         System.out.println("file Name"+fileAttachment);
         DataSource source = new FileDataSource(fileAttachment);
         messageBodyPart.setDataHandler(new DataHandler(source));
-        messageBodyPart.setFileName("report.html");
+        messageBodyPart.setFileName(fileName);
         multipart.addBodyPart(messageBodyPart);
         // Put parts in message
         message.setContent(multipart);
@@ -128,11 +128,11 @@ public class SendEmail {
                 if(report.lastModified() > createTime) {
                     createTime = report.lastModified();
                     path[0] = report.getAbsolutePath();
+                    path[1] = report.getName();
                     System.out.println(path[0]);
                 }
             }
         }
-        //path[1] = String.valueOf(createTime);
         return path;
     }
 
@@ -153,18 +153,18 @@ public class SendEmail {
 
     //附件的生成前 & 生成后的地址
     public void setAttachment() {
-        String path = getLastestDic()[0];
-        fileAttachment = path;
+        String path[] = getLastestDic();
+        fileAttachment = path[0];
         System.out.println(fileAttachment);
-        preAttachment = path;
+        fileName = path[1];
     }
 
     public String getFileAttachment() {
         return fileAttachment;
     }
 
-    public String getPreAttachment() {
-        return preAttachment;
+    public String getFileName() {
+        return fileName;
     }
 
 //    public Boolean del(){
