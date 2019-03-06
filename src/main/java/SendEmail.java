@@ -52,7 +52,7 @@ public class SendEmail {
         MimeBodyPart messageBodyPart = new MimeBodyPart();
         //fill message
 //        String url = createUrl();
-        messageBodyPart.setText("Hi ,UI automation has failed. For more details, see the attachment.");//此处为邮件内容
+        messageBodyPart.setText("Hi ,UI automation has failed. For more details,see the attachment.");//此处为邮件内容
         Multipart multipart = new MimeMultipart();
         multipart.addBodyPart(messageBodyPart);
         // Part two is attachment
