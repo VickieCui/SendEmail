@@ -15,7 +15,7 @@ public class SendEmail {
     private String user = "qa_vision@163.com";//发送邮件的邮箱名
     private String password = "123baixing";//密码
     private String shPath = "/Users/cuimingyue/Desktop/sync.sh";
-    private String to = "cuimingyue@baixing.com,guizhanluo@baixing.com";//接收邮件的邮箱名
+    private String to[] = {"cuimingyue@baixing.com","guizhanluo@baixing.com"};//接收邮件的邮箱名
     private String fileAttachment = "";
     private String preAttachment = "";
     public String output = "/home/ubuntu/.jenkins/workspace/e2e-ui/report";
@@ -42,7 +42,11 @@ public class SendEmail {
         // Define message
         MimeMessage message = new MimeMessage(session);
         message.setFrom(new InternetAddress(from));
-        message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+        InternetAddress[] sendTo = new InternetAddress[to.length];
+        for (int i = 0; i < to.length; i++) {
+            sendTo[i] = new InternetAddress(to[i]);
+        }
+        message.addRecipients(Message.RecipientType.TO, sendTo);
         message.setSubject("UI automation failed");//此处设置邮件标题
         // create the message part
         MimeBodyPart messageBodyPart = new MimeBodyPart();
