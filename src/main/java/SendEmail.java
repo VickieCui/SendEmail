@@ -80,7 +80,7 @@ public class SendEmail {
                     System.out.println(path[0]);
                 }
             }
-            if (path[1].contains("fail")) {
+            if (path[0].contains("fail")) {
                 isFail = true;
             }
         }
