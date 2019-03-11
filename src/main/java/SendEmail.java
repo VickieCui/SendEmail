@@ -64,16 +64,18 @@ public class SendEmail {
     }
 
     //获得最新的报告文件夹 & ped
-
     public String[] getLastestDic() {
         File file = new File(output);
         File[] reports = file.listFiles();
         long createTime = 0;
         String path[] = new String[2];
+        System.out.println("into path");
         for (File report : reports) {
             String name = report.getName().replace(" ", "");
+            System.out.println("B "+ name);
             if (name.contains("result") && name.contains("html")) {
                 if (report.lastModified() > createTime) {
+                    System.out.println("A "+ name);
                     createTime = report.lastModified();
                     path[0] = report.getAbsolutePath();
                     path[1] = report.getName();
@@ -85,31 +87,6 @@ public class SendEmail {
             }
         }
         return path;
-    }
-
-    public String getHtml() {
-        File file = new File(fileAttachment);
-        BufferedReader reader = null;
-        StringBuffer sb = new StringBuffer();
-        try {
-            reader = new BufferedReader(new FileReader(file));
-            String tempString = null;
-            while ((tempString = reader.readLine()) != null) {
-                System.out.println(tempString);
-                sb.append(tempString.toString());
-            }
-            reader.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (IOException e1) {
-                }
-            }
-        }
-        return sb.toString();
     }
 
     //附件信息
