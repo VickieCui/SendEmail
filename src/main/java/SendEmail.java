@@ -44,7 +44,7 @@ public class SendEmail {
         message.addRecipients(Message.RecipientType.TO, sendTo);
         message.setSubject("SeleniumPython UI automation failed");//此处设置邮件标题
         MimeBodyPart messageBodyPart = new MimeBodyPart();
-        messageBodyPart.setContent("Selenium Python automation has been failed ,for details please see the attachment. \n Or click the url http://vision.baixing.cn/jenkins/job/SeleniumPython/HTML_20Report/","text/html; charset=utf-8");
+        messageBodyPart.setContent("Selenium Python automation has been failed ,for more details please see the attachment. \n If the email is the latest one, you can also click the url http://vision.baixing.cn/jenkins/job/SeleniumPython/HTML_20Report/","text/html; charset=utf-8");
        // messageBodyPart.setText("Hi ,Selenium Python UI automation has failed. For more details,see the attachment.");//此处为邮件内容
         Multipart multipart = new MimeMultipart();
         multipart.addBodyPart(messageBodyPart);
