@@ -6,8 +6,7 @@
 - 自动发送自定义的构建失败邮件
 
 ## 业务线
-master Macaca UI automation
-SeleniumPython 主站UI automation
+不同分支对应不同业务，以适应于不同的jenkins job
 
 ## 待改进
 - 脚本地址与代码分离
