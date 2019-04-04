@@ -12,7 +12,7 @@ public class SendEmail {
     private String host = "smtp.163.com";//要跟自己的邮箱匹配，比如QQ邮箱smtp.qq.com;126邮箱smtp.126.com;
     private String user = "qa_vision@163.com";//发送邮件的邮箱名
     private String password = "123baixing";//密码
-    private String to[] = {"cuimingyue@baixing.com","guizhanluo@baixing.com"};//接收邮件的邮箱名
+    private String to[] = {"cuimingyue@baixing.com","guizhanluo@baixing.com","testing@baixing.com"};//接收邮件的邮箱名
     private String fileAttachment = "";
     private String fileName = "";
     boolean isFail = false;
