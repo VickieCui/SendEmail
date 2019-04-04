@@ -7,35 +7,61 @@ import javax.mail.internet.*;
 import java.io.*;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.HashMap;
 import java.util.Properties;
 
 public class SendEmail {
 
-    private String host = "smtp.163.com";//要跟自己的邮箱匹配，比如QQ邮箱smtp.qq.com;126邮箱smtp.126.com;
-    private  String user="qa_vision@163.com";//发送邮件的邮箱名
-    private String password="123baixing";//密码
-    private String shPath = "/Users/cuimingyue/Desktop/sync.sh";
-    private String to = "cuimingyue@baixing.com";//接收邮件的邮箱名
+    private String host;//要跟自己的邮箱匹配，比如QQ邮箱smtp.qq.com;126邮箱smtp.126.com;
+    private  String user;//发送邮件的邮箱名
+    private String password;//密码
+    private String to;//接收邮件的邮箱名
+    private String res[];
     private String fileAttachment = "";
     private String preAttachment = "";
-    public String output = "/Users/cuimingyue/.jenkins/workspace/机关术/output/";
-    String shell = "scp -r /Users/cuimingyue/.jenkins/workspace/机关术/output/* ubuntu@172.31.129.8:/home/ubuntu/tomcat9/webapps/jiguanshu/output/";
-    String rm = "rm -rf /Users/cuimingyue/.jenkins/workspace/机关术/output/*";
+    private String preUrl ;
+    public String del ;
+    public String output;
+    String shell ;
+    String rm ;
+    String html;
 
-    public static void main (String args[])
-            throws Exception {
-        String from = "qa_vision@163.com";//发送邮件的邮箱名
-        SendEmail email = new SendEmail();
-        email.setAttachment();
-        if(email.runSync()) {
-            if(email.isFail()) {
-                email.send(from);
-            }
-            email.del();
+    public SendEmail(HashMap<String,String> settings){
+        host = settings.get("host");
+        user = settings.get("user");
+        password = settings.get("password");
+        to = settings.get("to");
+        output = settings.get("output");
+        shell = settings.get("shell");
+        rm = settings.get("rm");
+        del = settings.get("del");
+        preUrl = settings.get("preUrl");
+        html = settings.get("html");
+        if(to.contains(",")){
+            res = to.split(",");
         }
     }
 
-    public void send(String from) throws MessagingException, IOException {
+    public static void main (String args[])
+            throws Exception {
+
+        IniRead read = new IniRead();
+        SendEmail email = new SendEmail(read.getConfig());
+        email.setAttachment();
+        if (email.del.equals("true")) {
+            if (email.runSync()) {
+                if (email.isFail()) {
+                    email.send();
+                }
+                email.del();
+            }
+        } else {
+            email.runSync();
+            email.send();
+        }
+    }
+
+    public void send() throws MessagingException, IOException {
         // Get system properties
         Properties props = System.getProperties();
         // Setup mail server
@@ -46,23 +72,31 @@ public class SendEmail {
         session.setDebug(false);
         // Define message
         MimeMessage message = new MimeMessage(session);
-        message.setFrom(new InternetAddress(from));
-        message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+        message.setFrom(new InternetAddress(user));
+        if(res != null) {
+            InternetAddress[] sendTo = new InternetAddress[res.length];
+            for (int i = 0; i < res.length; i++) {
+                sendTo[i] = new InternetAddress(res[i]);
+            }
+            message.addRecipients(Message.RecipientType.TO, sendTo);
+        } else{
+            message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+        }
         message.setSubject("主站APP UI自动化失败");//此处设置邮件标题
         // create the message part
         MimeBodyPart messageBodyPart = new MimeBodyPart();
         //fill message
         String url = createUrl();
-        messageBodyPart.setText("Hi ,\n主站APP自动化用例失败了呢>_<，内网的小伙伴可以点击链接查看\n\uD83D\uDC49 " + url + " \uD83D\uDC48\n 在家的小伙伴可以下载附件查看～");//此处为邮件内容
+        messageBodyPart.setText("Hi ,\n主站APP自动化用例失败了呢>_<，内网的小伙伴可以点击链接查看\n\uD83D\uDC49 " + url + " \uD83D\uDC48\n 在家的小伙伴可以下载附件(附件暂无截图信息)查看～");//此处为邮件内容
         Multipart multipart = new MimeMultipart();
         multipart.addBodyPart(messageBodyPart);
         // Part two is attachment
         messageBodyPart = new MimeBodyPart();
         setAttachment();
-        CompressUtil.compress(getPreAttachment(), getFileAttachment());
-        DataSource source = new FileDataSource(fileAttachment);
+        //CompressUtil.compress(getPreAttachment(), getFileAttachment());
+        DataSource source = new FileDataSource(html);
         messageBodyPart.setDataHandler(new DataHandler(source));
-        messageBodyPart.setFileName("report.zip");
+        messageBodyPart.setFileName("result.html");
         multipart.addBodyPart(messageBodyPart);
         // Put parts in message
         message.setContent(multipart);
@@ -76,7 +110,6 @@ public class SendEmail {
     }
 
     public boolean runSync(){
-        String shellString = "sh " + shPath;
         String[] cmd = new String[]{"sh", "-c", shell};
         try {
             Process p = Runtime.getRuntime().exec(cmd);
@@ -105,7 +138,7 @@ public class SendEmail {
             addr = InetAddress.getLocalHost();
             String timeStamp = getLastestDic()[1];
             //url = "http://" + addr.getHostAddress() + ":8080/jiguanshu/output/"+ timeStamp +"/report.html";
-            url = "http://vision.baixing.cn/jiguanshu/output/"+ timeStamp +"/failReport.html";
+            url = preUrl+ timeStamp +"/failReport.html";
             System.out.println("Local HostAddress: "+addr.getHostAddress());
 
         } catch (UnknownHostException e) {
@@ -129,6 +162,7 @@ public class SendEmail {
             }
         }
         path[1] = String.valueOf(createTime);
+        System.out.println("附件文件"+path[0]);
         return path;
     }
 
@@ -151,6 +185,7 @@ public class SendEmail {
     public void setAttachment(){
         String path = getLastestDic()[0];
         fileAttachment = path+".zip";
+        System.out.println("附件地址："+fileAttachment);
         preAttachment = path;
     }
 
@@ -163,7 +198,6 @@ public class SendEmail {
     }
 
     public Boolean del(){
-        String shellString = "sh " + shPath;
         String[] cmd = new String[]{"sh", "-c", rm};
         try {
             Runtime.getRuntime().exec(cmd);
