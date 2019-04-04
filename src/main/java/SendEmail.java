@@ -57,7 +57,9 @@ public class SendEmail {
             }
         } else {
             email.runSync();
-            email.send();
+            if (email.isFail()) {
+                email.send();
+            }
         }
     }
 
